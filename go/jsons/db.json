@@ -1,0 +1,20 @@
+
+
+{
+  "name": "myDB",
+  "tables": [
+    {
+      "name": "table1",
+      "attributes": [
+        {
+          "name": "id",
+          "type": "serial"
+        },
+        {
+          "name": "first_name",
+          "type": "varchar"
+        }
+      ]
+    }
+  ]
+}
