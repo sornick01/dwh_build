@@ -1,0 +1,16 @@
+database:
+  name:
+    myDB
+  tables:
+    - name: table1
+      attributes:
+        - name: id
+          type: serial
+        - name: firstname
+          type: varchar(30)
+          constraints:
+            - pk: id
+              fk:
+                - tablename: cars
+                  pole: id
+    - name: table2

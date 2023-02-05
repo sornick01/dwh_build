@@ -1,5 +1,5 @@
 
-
+database
 {
   "name": "myDB",
   "tables": [
@@ -15,6 +15,6 @@
           "type": "varchar"
         }
       ]
-    }
-  ]
+    },
+  ],
 }
