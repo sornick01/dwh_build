@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/jackc/pgx/v5"
 	"log"
 	"os"
 
@@ -27,4 +29,13 @@ func main() {
 		log.Fatal(err)
 	}
 
+	conn, err := pgx.Connect(context.Background(), "postgresql://postgres:postgrespw@localhost:32768/postgres")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = conn.Exec(context.Background(), db.ToSql())
+	if err != nil {
+		log.Fatal(err)
+	}
 }

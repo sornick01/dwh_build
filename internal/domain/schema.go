@@ -7,12 +7,12 @@ type Schema struct {
 	Tables []Table `json:"tables"`
 }
 
-func (s *Schema) ToSql(builder *strings.Builder) {
+func (s *Schema) toSql(builder *strings.Builder) {
 	builder.WriteString("create schema ")
 	builder.WriteString(s.Name)
 	builder.WriteString(";\n")
 
 	for _, table := range s.Tables {
-		table.ToSql(builder, s.Name)
+		table.toSql(builder, s.Name)
 	}
 }

@@ -36,7 +36,8 @@
               "name": "model",
               "type": "varchar(30)"
             }
-          ]
+          ],
+          "primary_key": ["id", "brand"]
         }
       ]
     }

@@ -11,7 +11,7 @@ func (db *Database) ToSql() string {
 	var builder strings.Builder
 
 	for _, schema := range db.Schemas {
-		schema.ToSql(&builder)
+		schema.toSql(&builder)
 	}
 
 	return builder.String()
