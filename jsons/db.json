@@ -1,0 +1,44 @@
+{
+  "name": "test_db",
+  "schemas": [
+    {
+      "name": "some_schema",
+      "tables": [
+        {
+          "name": "drivers",
+          "attributes": [
+            {
+              "name": "id",
+              "type": "serial"
+            },
+            {
+              "name": "name",
+              "type": "varchar(60)"
+            },
+            {
+              "name": "age",
+              "type": "integer"
+            }
+          ]
+        },
+        {
+          "name": "cars",
+          "attributes": [
+            {
+              "name": "id",
+              "type": "serial"
+            },
+            {
+              "name": "brand",
+              "type": "varchar(30)"
+            },
+            {
+              "name": "model",
+              "type": "varchar(30)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
