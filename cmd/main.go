@@ -4,9 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/jackc/pgx/v5"
 	"log"
 	"os"
+
+	"github.com/jackc/pgx/v5"
 
 	"dwh/internal/domain"
 )
@@ -29,7 +30,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	conn, err := pgx.Connect(context.Background(), "postgresql://postgres:postgrespw@localhost:32768/postgres")
+	conn, err := pgx.Connect(context.Background(), "postgresql://postgres:1234@localhost:5432/postgres")
 	if err != nil {
 		log.Fatal(err)
 	}

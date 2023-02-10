@@ -32,6 +32,8 @@ func (t *Table) toSql(builder *strings.Builder, schemaName string) {
 			}
 		}
 		builder.WriteString(")\n")
+	} else {
+		builder.WriteByte('\n')
 	}
 
 	builder.WriteString(");\n")
