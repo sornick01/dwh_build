@@ -1,15 +1,11 @@
 package main
 
 import (
-	"context"
+	"dwh/internal/domain"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-
-	"github.com/jackc/pgx/v5"
-
-	"dwh/internal/domain"
 )
 
 func main() {
@@ -30,13 +26,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	conn, err := pgx.Connect(context.Background(), "postgresql://postgres:1234@localhost:5432/postgres")
-	if err != nil {
-		log.Fatal(err)
-	}
+	fmt.Println(db.ToSql())
+	//conn, err := pgx.Connect(context.Background(), "postgresql://postgres:1234@localhost:5432/postgres")
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 
-	_, err = conn.Exec(context.Background(), db.ToSql())
-	if err != nil {
-		log.Fatal(err)
-	}
+	//_, err = conn.Exec(context.Background(), db.ToSql())
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 }
