@@ -3,9 +3,10 @@ package domain
 import "strings"
 
 type Database struct {
-	Name      string     `json:"name"`
-	Schemas   []Schema   `json:"schemas"`
-	Relations []Relation `json:"relations"`
+	Name        string        `json:"name"`
+	Schemas     []Schema      `json:"schemas"`
+	Relations   []Relation    `json:"relations,omitempty"`
+	Constraints []Constraints `json:"constraints,omitempty"`
 }
 
 func (db *Database) ToSql() string {
@@ -19,5 +20,8 @@ func (db *Database) ToSql() string {
 		relation.BuildRelationSql(&builder)
 	}
 
+	for _, constraint := range db.Constraints {
+		constraint.BuildConstraints(&builder)
+	}
 	return builder.String()
 }
