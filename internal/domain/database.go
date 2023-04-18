@@ -3,8 +3,9 @@ package domain
 import "strings"
 
 type Database struct {
-	Name    string   `json:"name"`
-	Schemas []Schema `json:"schemas"`
+	Name      string     `json:"name"`
+	Schemas   []Schema   `json:"schemas"`
+	Relations []Relation `json:"relations"`
 }
 
 func (db *Database) ToSql() string {
@@ -12,6 +13,10 @@ func (db *Database) ToSql() string {
 
 	for _, schema := range db.Schemas {
 		schema.toSql(&builder)
+	}
+
+	for _, relation := range db.Relations {
+		relation.BuildRelationSql(&builder)
 	}
 
 	return builder.String()

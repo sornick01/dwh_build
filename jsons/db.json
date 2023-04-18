@@ -43,9 +43,17 @@
       ],
       "relations": [
         {
-          "referenced": "driver",
-          "reference": "cars",
-          "relation_type": 0,
+          "reference_table": {
+            "schema": "some_schema",
+            "table": "driver",
+            "field": "id"
+          },
+          "reference_to": {
+            "schema": "some_schema",
+            "table": "cars",
+            "field": "id"
+          },
+          "relation_type": 1
         }
       ]
     }
