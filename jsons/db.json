@@ -19,7 +19,8 @@
               "name": "age",
               "type": "integer"
             }
-          ]
+          ],
+          "primary_key": ["id"]
         },
         {
           "name": "cars",
@@ -38,6 +39,13 @@
             }
           ],
           "primary_key": ["id, brand"]
+        }
+      ],
+      "relations": [
+        {
+          "referenced": "driver",
+          "reference": "cars",
+          "relation_type": 0,
         }
       ]
     }
