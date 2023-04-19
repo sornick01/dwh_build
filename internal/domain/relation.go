@@ -5,13 +5,30 @@ import (
 	"strings"
 )
 
-type RelationType string
+type (
+	RelationType  string
+	OnActionType  string
+	OperationType string
+)
 
 const (
-	OneToOne   = "one_to_one"
-	OneToMany  = "one_to_many"
-	ManyToMany = "many_to_many"
+	OneToOne        RelationType  = "one_to_one"
+	OneToMany       RelationType  = "one_to_many"
+	ManyToMany      RelationType  = "many_to_many"
+	Cascade         OnActionType  = "cascade"
+	Restrict        OnActionType  = "restrict"
+	SetNull         OnActionType  = "set null"
+	SetDefault      OnActionType  = "set default"
+	NoAction        OnActionType  = "no action"
+	DeleteOperation OperationType = "delete"
+	UpdateOperation OperationType = "update"
 )
+
+type OnDeleteUpdate struct {
+	Operation OperationType `json:"operation"`
+	Action    OnActionType  `json:"action"`
+	Column    string        `json:"column,omitempty"`
+}
 
 type RelationTable struct {
 	Schema string `json:"schema"`
@@ -20,9 +37,10 @@ type RelationTable struct {
 }
 
 type Relation struct {
-	ReferenceTable RelationTable `json:"reference_table"` // кто ссылается
-	ReferenceTo    RelationTable `json:"reference_to"`    // куда ссылается
-	RelationType   RelationType  `json:"relation_type"`
+	ReferenceTable RelationTable   `json:"reference_table"` // кто ссылается
+	ReferenceTo    RelationTable   `json:"reference_to"`    // куда ссылается
+	RelationType   RelationType    `json:"relation_type"`
+	OnDeleteUpdate *OnDeleteUpdate `json:"on_delete,omitempty"`
 }
 
 func (r *Relation) BuildRelationSql(builder *strings.Builder) {
@@ -43,6 +61,18 @@ alter table %s.%s
 `,
 		r.ReferenceTable.Schema, r.ReferenceTable.Table, r.ReferenceTable.Table, r.ReferenceTo.Table, r.ReferenceTable.Field,
 		r.ReferenceTo.Schema, r.ReferenceTo.Table, r.ReferenceTo.Field)
+	if r.OnDeleteUpdate != nil {
+		str = strings.TrimSuffix(str, `;
+`)
+		switch r.OnDeleteUpdate.Action {
+		case SetNull, SetDefault:
+			str += fmt.Sprintf(` on %s %s (%s);
+`, r.OnDeleteUpdate.Operation, r.OnDeleteUpdate.Action, r.OnDeleteUpdate.Column)
+		default:
+			str += fmt.Sprintf(` on %s %s;
+`, r.OnDeleteUpdate.Operation, r.OnDeleteUpdate.Action)
+		}
+	}
 	builder.WriteString(str)
 }
 

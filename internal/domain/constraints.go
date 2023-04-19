@@ -10,12 +10,17 @@ type Default struct {
 	Value  interface{} `json:"value"`
 }
 
+type Check struct {
+	Name      string `json:"name"`
+	Condition string `json:"condition"`
+}
 type Constraints struct {
 	Schema  string    `json:"schema"`
 	Table   string    `json:"table"`
 	Unique  []string  `json:"unique,omitempty"`
 	NotNull []string  `json:"notNull,omitempty"`
 	Default []Default `json:"default,omitempty"`
+	Check   []Check   `json:"check,omitempty"`
 }
 
 func (c *Constraints) BuildConstraints(builder *strings.Builder) {
@@ -30,6 +35,20 @@ func (c *Constraints) BuildConstraints(builder *strings.Builder) {
 	if len(c.Default) != 0 {
 		c.buildDefaultConstraint(builder)
 	}
+
+	if len(c.Check) != 0 {
+		c.buildCheckConstraint(builder)
+	}
+}
+
+func (c *Constraints) buildCheckConstraint(builder *strings.Builder) {
+	var str string
+	for _, check := range c.Check {
+		str += fmt.Sprintf(`
+alter table %s.%s add constraint %s check (%s);
+`, c.Schema, c.Table, check.Name, check.Condition)
+	}
+	builder.WriteString(str)
 }
 
 func (c *Constraints) buildUniqueConstraint(builder *strings.Builder) {
