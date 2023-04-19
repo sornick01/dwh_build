@@ -37,7 +37,10 @@ func (r *Relation) BuildRelationSql(builder *strings.Builder) {
 }
 
 func (r *Relation) buildOneToOne(builder *strings.Builder) {
-	str := fmt.Sprintf("alter table %s.%s\n\tadd constraint fk_%s_%s foreign key (%s) references %s.%s (%s);",
+	str := fmt.Sprintf(`
+alter table %s.%s
+    add constraint fk_%s_%s foreign key (%s) references %s.%s (%s);
+`,
 		r.ReferenceTable.Schema, r.ReferenceTable.Table, r.ReferenceTable.Table, r.ReferenceTo.Table, r.ReferenceTable.Field,
 		r.ReferenceTo.Schema, r.ReferenceTo.Table, r.ReferenceTo.Field)
 	builder.WriteString(str)

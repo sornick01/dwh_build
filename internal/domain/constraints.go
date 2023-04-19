@@ -7,7 +7,6 @@ import (
 
 type Default struct {
 	Column string      `json:"column"`
-	Type   string      `json:"type"`
 	Value  interface{} `json:"value"`
 }
 
@@ -49,7 +48,7 @@ func (c *Constraints) buildNotNullConstraint(builder *strings.Builder) {
 	for i := range c.NotNull {
 		str += fmt.Sprintf(`
 alter table %s.%s alter column %s set not null;
-`, c.NotNull[i])
+`, c.Schema, c.Table, c.NotNull[i])
 	}
 	builder.WriteString(str)
 }
