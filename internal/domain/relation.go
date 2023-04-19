@@ -5,12 +5,12 @@ import (
 	"strings"
 )
 
-type RelationType int
+type RelationType string
 
 const (
-	OneToOne = iota
-	OneToMany
-	ManyToMany
+	OneToOne   = "one_to_one"
+	OneToMany  = "one_to_many"
+	ManyToMany = "many_to_many"
 )
 
 type RelationTable struct {

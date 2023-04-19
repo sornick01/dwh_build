@@ -53,7 +53,7 @@
             "table": "cars",
             "field": "id"
           },
-          "relation_type": 1
+          "relation_type": "one_to_many"
         }
       ]
     }
