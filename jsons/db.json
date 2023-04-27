@@ -2,60 +2,139 @@
   "name": "test_db",
   "schemas": [
     {
-      "name": "some_schema",
+      "name": "public",
       "tables": [
         {
-          "name": "drivers",
+          "name": "d_clients",
           "attributes": [
             {
-              "name": "id",
-              "type": "serial"
+              "name": "clientid",
+              "type": "bigint"
             },
             {
-              "name": "name",
-              "type": "varchar(60)"
+              "name": "firstname",
+              "type": "text"
             },
             {
-              "name": "age",
-              "type": "integer"
+              "name": "lastname",
+              "type": "text"
+            },
+            {
+              "name": "utm_campaign",
+              "type": "varchar(30)"
             }
           ],
-          "primary_key": ["id"]
+          "primary_key": ["clientid"]
         },
         {
-          "name": "cars",
+          "name": "d_user_payment_log",
           "attributes": [
             {
-              "name": "id",
-              "type": "serial"
+              "name": "paymentlogid",
+              "type": "bigint"
             },
             {
-              "name": "brand",
-              "type": "varchar(30)"
+              "name": "clientid",
+              "type": "bigint"
             },
             {
-              "name": "model",
-              "type": "varchar(30)"
+              "name": "hitdatetime",
+              "type": "TIMESTAMP"
+            },
+            {
+              "name": "action",
+              "type": "VARCHAR(20)"
             }
           ],
-          "primary_key": ["id, brand"]
-        }
-      ],
-      "relations": [
+          "primary_key": ["paymentlogid"]
+        },
         {
-          "reference_table": {
-            "schema": "some_schema",
-            "table": "driver",
-            "field": "id"
-          },
-          "reference_to": {
-            "schema": "some_schema",
-            "table": "cars",
-            "field": "id"
-          },
-          "relation_type": "one_to_many"
+          "name": "d_user_activity_log",
+          "attributes": [
+            {
+              "name": "activityid",
+              "type": "bigint"
+            },
+            {
+              "name": "clientid",
+              "type": "bigint"
+            },
+            {
+              "name": "hitdatetime",
+              "type": "TIMESTAMP"
+            },
+            {
+              "name": "action",
+              "type": "VARCHAR(20)"
+            }
+          ],
+          "primary_key": ["activityid"]
+        },
+        {
+          "name": "d_vendors",
+          "attributes": [
+            {
+              "name": "vendorid",
+              "type": "bigint"
+            },
+            {
+              "name": "namevendor",
+              "type": "text"
+            },
+            {
+              "name": "description",
+              "type": "text"
+            }
+          ],
+          "primary_key": ["vendorid"]
+        },
+        {
+          "name": "d_categories",
+          "attributes": [
+            {
+              "name": "categoryid",
+              "type": "bigint"
+            },
+            {
+              "name": "namecategory",
+              "type": "text"
+            },
+            {
+              "name": "description",
+              "type": "text"
+            }
+          ],
+          "primary_key": ["categoryid"]
         }
       ]
+    }
+  ],
+  "relations": [
+    {
+      "reference_table": {
+        "schema": "public",
+        "table": "d_user_payment_log",
+        "field": "clientid"
+      },
+      "reference_to": {
+        "schema": "public",
+        "table": "d_clients",
+        "field": "clientid"
+      },
+      "relation_type": "one_to_many"
+    },
+    {
+      "reference_table": {
+        "schema": "public",
+        "table": "d_user_activity_log",
+        "field": "clientid"
+      },
+      "reference_to": {
+        "schema": "public",
+        "table": "d_clients",
+        "field": "clientid"
+      },
+      "relation_type": "one_to_many"
     }
   ]
 }
