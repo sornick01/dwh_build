@@ -5,10 +5,15 @@ import (
 	"strings"
 )
 
+type Column struct {
+	Name string  `json:"name"`
+	As   *string `json:"as,omitempty"`
+}
+
 type Row struct {
 	Schema  *string  `json:"schema,omitempty"`
 	Table   string   `json:"table"`
-	Columns []string `json:"columns"`
+	Columns []Column `json:"columns"`
 }
 
 type Route struct {
@@ -61,7 +66,11 @@ func (r *Route) buildRoute(builder *strings.Builder) {
 
 	var srcCols string
 	for _, col := range r.Source.Columns {
-		srcCols += fmt.Sprintf("%s, ", col)
+		if col.As != nil {
+			srcCols += fmt.Sprintf("%s as %s, ", col.Name, *col.As)
+		} else {
+			srcCols += fmt.Sprintf("%s, ", col.Name)
+		}
 	}
 	srcCols = strings.TrimSuffix(srcCols, ", ")
 
