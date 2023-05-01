@@ -7,6 +7,8 @@ type Database struct {
 	Schemas     []Schema      `json:"schemas"`
 	Relations   []Relation    `json:"relations,omitempty"`
 	Constraints []Constraints `json:"constraints,omitempty"`
+	Indexes     []Index       `json:"indexes,omitempty"`
+	Comments    []Comment     `json:"comments,omitempty"`
 	Routes      *Routes       `json:"routes,omitempty"`
 }
 
@@ -25,7 +27,15 @@ func (db *Database) ToSql() string {
 		constraint.BuildConstraints(&builder)
 	}
 
-	if db.Routes != nil {
+	for _, index := range db.Indexes {
+		index.BuildIndex(&builder)
+	}
+
+	for _, comment := range db.Comments {
+		comment.BuildComment(&builder)
+	}
+
+	if db.Routes != nil { // TODO: вынести наверх
 		db.Routes.BuildRoutes(&builder)
 	}
 

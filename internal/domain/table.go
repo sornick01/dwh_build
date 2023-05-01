@@ -1,15 +1,21 @@
 package domain
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type Table struct {
-	Name        string      `json:"name"`
-	Attributes  []Attribute `json:"attributes"`
-	PrimaryKey  []string    `json:"primary_key,omitempty"`
-	Constraints Constraints `json:"constraints,omitempty"` //TODO: может быть вынесесем на уровень бд
+	Name       string      `json:"name"`
+	Attributes []Attribute `json:"attributes"`
+	PrimaryKey []string    `json:"primary_key,omitempty"`
+	//Constraints Constraints `json:"constraints,omitempty"` //TODO: может быть вынесесем на уровень бд
 }
 
 func (t *Table) toSql(builder *strings.Builder, schemaName string) {
+	dropIfExists := fmt.Sprintf(`drop table if exists %s.%s`, schemaName, t.Name)
+	builder.WriteString(dropIfExists)
+
 	builder.WriteString("create table ")
 	builder.WriteString(schemaName)
 	builder.WriteByte('.')

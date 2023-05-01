@@ -21,7 +21,7 @@ func main() {
 
 	err = json.Unmarshal(b, db)
 
-	fmt.Println(db.ToSql())
+	//fmt.Println(db.ToSql())
 
 	fmt.Println(db.ToSql())
 	conn, err := pgx.Connect(context.Background(), "postgresql://postgres:1234@localhost:5432/dst")
