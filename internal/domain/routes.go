@@ -26,7 +26,14 @@ type Routes struct {
 	Routes []Route `json:"routes,omitempty"`
 }
 
-func (r *Routes) BuildRoutes(builder *strings.Builder) {
+func (r *Routes) ToSql() string {
+	var builder strings.Builder
+	r.buildRoutes(&builder)
+
+	return builder.String()
+}
+
+func (r *Routes) buildRoutes(builder *strings.Builder) {
 	if len(r.Routes) == 0 {
 		return
 	}

@@ -9,7 +9,6 @@ type Database struct {
 	Constraints []Constraints `json:"constraints,omitempty"`
 	Indexes     []Index       `json:"indexes,omitempty"`
 	Comments    []Comment     `json:"comments,omitempty"`
-	Routes      *Routes       `json:"routes,omitempty"`
 }
 
 func (db *Database) ToSql() string {
@@ -33,10 +32,6 @@ func (db *Database) ToSql() string {
 
 	for _, comment := range db.Comments {
 		comment.BuildComment(&builder)
-	}
-
-	if db.Routes != nil { // TODO: вынести наверх
-		db.Routes.BuildRoutes(&builder)
 	}
 
 	return builder.String()
