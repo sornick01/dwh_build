@@ -6,8 +6,8 @@ import (
 )
 
 type Column struct {
-	Name string  `json:"name"`
-	As   *string `json:"as,omitempty"`
+	NameOrValue string  `json:"name_or_value"`
+	As          *string `json:"as,omitempty"`
 }
 
 type Row struct {
@@ -16,14 +16,24 @@ type Row struct {
 	Columns []Column `json:"columns"`
 }
 
+type Additions struct {
+	Where   *string `json:"where,omitempty"`
+	GroupBy *string `json:"groupBy,omitempty"`
+	Having  *string `json:"having,omitempty"`
+	OrderBy *string `json:"orderBy,omitempty"`
+	Limit   *string `json:"limit,omitempty"`
+	Offset  *string `json:"offset,omitempty"`
+}
+
 type Route struct {
-	Source      Row     `json:"source"`
-	Destination Row     `json:"destination"`
-	Condition   *string `json:"condition,omitempty"`
+	Source      Row        `json:"source"`
+	Destination Row        `json:"destination"`
+	Additions   *Additions `json:"additions,omitempty"`
 }
 
 type Routes struct {
-	Routes []Route `json:"routes,omitempty"`
+	DatabaseName string  `json:"database_name"`
+	Routes       []Route `json:"routes,omitempty"`
 }
 
 func (r *Routes) ToSql() string {
@@ -74,9 +84,9 @@ func (r *Route) buildRoute(builder *strings.Builder) {
 	var srcCols string
 	for _, col := range r.Source.Columns {
 		if col.As != nil {
-			srcCols += fmt.Sprintf("%s as %s, ", col.Name, *col.As)
+			srcCols += fmt.Sprintf("%s as %s, ", col.NameOrValue, *col.As)
 		} else {
-			srcCols += fmt.Sprintf("%s, ", col.Name)
+			srcCols += fmt.Sprintf("%s, ", col.NameOrValue)
 		}
 	}
 	srcCols = strings.TrimSuffix(srcCols, ", ")
@@ -87,12 +97,37 @@ select %s
 from %s;
 `, dest, destCols, srcCols, src)
 
-	if r.Condition != nil {
+	if r.Additions != nil {
 		str = strings.TrimSuffix(str, `;
 `)
-		str += fmt.Sprintf(`
-where %s;
-`, *r.Condition)
+		str += r.Additions.build()
 	}
+
 	builder.WriteString(str)
+}
+
+func (a *Additions) build() string {
+	var str string
+
+	if a.Where != nil {
+		str += fmt.Sprintf("where %s", *a.Where)
+	}
+	if a.GroupBy != nil {
+		str += fmt.Sprintf("group by %s", *a.GroupBy)
+	}
+	if a.Having != nil {
+		str += fmt.Sprintf("having %s", *a.Having)
+	}
+	if a.OrderBy != nil {
+		str += fmt.Sprintf("order by %s", *a.OrderBy)
+	}
+	if a.Limit != nil {
+		str += fmt.Sprintf("limit %s", *a.Limit)
+	}
+	if a.Offset != nil {
+		str += fmt.Sprintf("offset %s", *a.Offset)
+	}
+
+	return fmt.Sprintf(`%s;
+`, str)
 }

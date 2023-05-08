@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package etl;
+option go_package = "etl/api/etl;etl";
+
+service etl {
+  rpc CreateDatabase(CreateDatabaseRequest) returns (CreateDatabaseResponse) {}
+  rpc MigrateData(MigrateDataRequest) returns (MigrateDataResponse) {}
+}
+
+message CreateDatabaseRequest {
+  string config_id = 1;
+//  Layer layer = 2;
+//
+//  enum Layer {
+//    stg = 0;
+//    ods = 1;
+//    dm = 2;
+//  }
+}
+
+message CreateDatabaseResponse {
+  bool success = 1;
+}
+
+message MigrateDataRequest {
+  string config_id = 1;
+//  Layer layer = 2;
+//
+//  enum Layer {
+//    stg = 0;
+//    ods = 1;
+//    dm = 2;
+//  }
+}
+
+message MigrateDataResponse {
+  bool success = 1;
+}

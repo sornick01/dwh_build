@@ -9,7 +9,6 @@ type Table struct {
 	Name       string      `json:"name"`
 	Attributes []Attribute `json:"attributes"`
 	PrimaryKey []string    `json:"primary_key,omitempty"`
-	//Constraints Constraints `json:"constraints,omitempty"` //TODO: может быть вынесесем на уровень бд
 }
 
 func (t *Table) toSql(builder *strings.Builder, schemaName string) {
