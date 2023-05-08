@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"dwh/internal/domain"
 	"encoding/json"
+	"etl/internal/domain"
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"log"

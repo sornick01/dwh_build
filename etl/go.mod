@@ -1,4 +1,4 @@
-module dwh
+module etl
 
 go 1.20
 
