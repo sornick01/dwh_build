@@ -10,7 +10,7 @@ import (
 const BatchSize = 1000
 
 const (
-	STG = "STG"
+	RAW = "RAW"
 	ODS = "ODS"
 	DDS = "DDS"
 	DM  = "DM"
@@ -19,8 +19,8 @@ const (
 func GetStage() string {
 	var res string
 	switch os.Getenv("ETL_STAGE") {
-	case STG:
-		res = STG
+	case RAW:
+		res = RAW
 	case ODS:
 		res = ODS
 	case DDS:

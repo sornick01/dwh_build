@@ -12,21 +12,18 @@ type Validator struct {
 	//repo *repository.Repository
 }
 
+// Run - запуск валидации данных
 func (v *Validator) Run(ctx context.Context, rows []map[string]interface{}) ([]map[string]interface{}, error) {
 	var checkList []validateFunc
 
 	switch stage := config.GetStage(); stage {
-	case config.STG:
-		// TODO: добавить проверок для STG
-		checkList = v.validateSTG()
+	case config.RAW:
+		checkList = v.validateRAW()
 	case config.ODS:
-		// TODO: добавить проверок для ODS
 		checkList = v.validateODS()
 	case config.DDS:
-		// TODO: добавить проверок для DDS
 		checkList = v.validateDDS()
 	case config.DM:
-		// TODO: добавить проверок для DM
 		checkList = v.validateDM()
 	default:
 		return nil, errors.New(stage)
@@ -42,9 +39,9 @@ func (v *Validator) Run(ctx context.Context, rows []map[string]interface{}) ([]m
 	return rows, nil
 }
 
-func (v *Validator) validateSTG() []validateFunc {
+func (v *Validator) validateRAW() []validateFunc {
 	return []validateFunc{
-		// TODO: добавить проверок для STG
+		// TODO: добавить проверок для RAW
 	}
 }
 
