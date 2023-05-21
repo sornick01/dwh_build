@@ -1,0 +1,176 @@
+version: '3.7'
+
+services:
+
+  db_config:
+    container_name: "db_config"
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    build:
+      context: .
+      dockerfile: db_config.Dockerfile
+    profiles:
+      - postgresql
+    ports:
+      - "5432:5432"
+
+  db_raw:
+    container_name: "db_raw"
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    build:
+      context: .
+      dockerfile: db_raw.Dockerfile
+    profiles:
+      - postgresql
+    ports:
+      - "5433:5433"
+
+  db_ods:
+    container_name: "db_ods"
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    build:
+      context: .
+      dockerfile: db_ods.Dockerfile
+    profiles:
+      - postgresql
+    ports:
+      - "5434:5434"
+
+  db_dds:
+    container_name: "db_dds"
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    build:
+      context: .
+      dockerfile: db_dds.Dockerfile
+    profiles:
+      - postgresql
+    ports:
+      - "5435:5435"
+
+  db_dm:
+    container_name: "db_dm"
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    build:
+      context: .
+      dockerfile: db_dm.Dockerfile
+    profiles:
+      - postgresql
+    ports:
+      - "5436:5436"
+
+  rest:
+    container_name: "rest"
+    build:
+      context: .
+      dockerfile: rest.Dockerfile
+    env_file:
+      - rest.env
+    ports:
+      - "8080:8080" # http
+      - "8090:8090" # grpc
+    profiles:
+      - rest
+    volumes:
+      - .:/app/
+
+  etl_raw:
+    container_name: "etl_raw"
+    build:
+      context: .
+      dockerfile: etl_raw.Dockerfile
+    env_file:
+      - etl_raw.env
+    environment:
+      - CONFIG_NAME=etl_raw
+    ports:
+      - "8091:8091" #for grpc
+    depends_on:
+      - db_config
+      - db_raw
+    profiles:
+      - etl
+    volumes:
+      - .:/app/
+
+  etl_ods:
+    container_name: "etl_ods"
+    build:
+      context: .
+      dockerfile: etl_ods.Dockerfile
+    env_file:
+      - etl_ods.env
+    environment:
+      - CONFIG_NAME=etl_ods
+    ports:
+      - "8092:8092" #for grpc
+    depends_on:
+      - db_config
+      - db_ods
+    profiles:
+      - etl
+    volumes:
+      - .:/app/
+
+  etl_dds:
+    container_name: "etl_dds"
+    build:
+      context: .
+      dockerfile: etl_dds.Dockerfile
+    env_file:
+      - etl_dds.env
+    environment:
+      - CONFIG_NAME=etl_dds
+    ports:
+      - "8093:8093" #for grpc
+    depends_on:
+      - db_config
+      - db_dds
+    profiles:
+      - etl
+    volumes:
+      - .:/app/
+
+  etl_dm:
+    container_name: "etl_dm"
+    build:
+      context: .
+      dockerfile: etl_dm.Dockerfile
+    env_file:
+      - etl_dm.env
+    environment:
+      - CONFIG_NAME=etl_dm
+    ports:
+      - "8094:8094" #for grpc
+    depends_on:
+      - db_config
+      - db_dds
+    profiles:
+      - etl
+    volumes:
+      - .:/app/
+
+volumes:
+  database_config:
+  database_raw:
+  database_ods:
+  database_dds:
+  database_dm:

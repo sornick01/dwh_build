@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 	"github.com/go-chi/chi/v5"
-	_ "github.com/go-chi/chi/v5"
 	"net/http"
 )
 

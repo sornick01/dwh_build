@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"fmt"
+	"github.com/google/uuid"
 	"strings"
 
 	"etl/internal/domain"
@@ -58,7 +59,7 @@ func (r *Repository) TotalSourceRows(ctx context.Context, src string, filters *d
 }
 
 // GetConfig - получение конфига по id
-func (r *Repository) GetConfig(ctx context.Context, id string) (string, error) {
+func (r *Repository) GetConfig(ctx context.Context, id uuid.UUID) (string, error) {
 	query := psql().Select("config").From("configs").Where(sq.Eq{"id": id})
 
 	stmt, args, err := query.ToSql()
